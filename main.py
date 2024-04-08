@@ -13,7 +13,7 @@ from pypdf import PdfWriter
 from selenium import webdriver
 from selenium.common import NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
-
+import pygame
 
 def convert_hpthek(book_id, page_number, platform_domain, cookies):
     print(f"processing page {page_number}...")
@@ -133,8 +133,8 @@ print(str(index).zfill(2) + " | abort")
 print("----------------------------------------------------------------")
 
 # get user selection
-# selection = int(input(f"Select the book you want to convert to pdf or abort [{index}]: "))
-selection = 4
+selection = int(input(f"Select the book you want to convert to pdf or abort [{index}]: "))
+#selection = 4
 # validate input
 if selection == index:
     sys.exit(0)
@@ -245,10 +245,15 @@ elif platform == 1:
     temp = re.findall(r'\d+', svg_path)
     selected_book = list(map(int, temp))[0]
 
+    pygame.init()
+    screen = pygame.display.set_mode((720, 1280))
+
     # initialize requests
     with ThreadPoolExecutor() as executor:
         for i in range(first_page_index, last_page_index):
             t = executor.submit(convert_hpthek, selected_book, i, platform_domain, cookies)
+
+            pygame.surface = pygame.image.load( path +f"\\tmp\\book-{i}.svg" )
             print(t, convert_hpthek, selected_book, i, platform_domain, cookies)
 
 
